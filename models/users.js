@@ -53,6 +53,21 @@ const schema = new mongoose.Schema({
       }
     ]
   },
+  collections: {
+    type: [
+      {
+        exp: {
+          type: mongoose.ObjectId,
+          ref: 'exps',
+          required: [true, '缺少貼文']
+        },
+        quantity: {
+          type: Number,
+          required: [true, '缺少數量']
+        }
+      }
+    ]
+  },
   role: {
     // 0 = 使用者
     // 1 = 管理員
