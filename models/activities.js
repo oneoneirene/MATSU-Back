@@ -28,6 +28,14 @@ const schema = new mongoose.Schema({
   sell: {
     type: Boolean,
     default: false
+  },
+  start: {
+    type: String,
+    required: [true, '缺少開始日期']
+  },
+  end: {
+    type: String,
+    required: [true, '缺少結束日期']
   }
 }, { versionKey: false })
 
