@@ -11,11 +11,11 @@ const schema = new mongoose.Schema({
   //   required: [true, '缺少行程價格']
   // },
   startDay: {
-    type: Date,
+    type: String,
     required: [true, '缺少開始日期']
   },
   endDay: {
-    type: Date,
+    type: String,
     required: [true, '缺少結束日期']
   },
   image: {
