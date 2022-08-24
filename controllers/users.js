@@ -1,4 +1,5 @@
 import users from '../models/users.js'
+import exps from '../models/exps.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -46,7 +47,8 @@ export const login = async (req, res) => {
         account: req.user.account,
         email: req.user.email,
         cart: req.user.cart.length,
-        role: req.user.role
+        role: req.user.role,
+        collection: req.user.collection.length
       }
     })
   } catch (error) {
@@ -121,24 +123,120 @@ export const deleteUser = async (req, res) => {
   }
 }
 
+// export const editUser = async (req, res) => {
+//   console.log(req.body)
+//   try {
+//     const data = {
+//       name: req.body.name,
+//       image: req.file?.path || ''
+//     }
+//     // if (req.file) data.image = req.file.path
+//     const result = await users.findByIdAndUpdate(req.params.id, data, { new: true })
+//     res.status(200).send({ success: true, message: '', result })
+//   } catch (error) {
+//     if (error.name === 'ValidationError') {
+//       console.log('1234')
+//       const key = Object.keys(error.errors)[0]
+//       const message = error.errors[key].message
+//       return res.status(400).send({ success: false, message })
+//     } else {
+//       res.status(500).send({ success: false, message: '伺服器錯誤' })
+//     }
+//   }
+// }
+
 export const editUser = async (req, res) => {
-  console.log(req.body)
   try {
-    const data = {
-      name: req.body.name,
-      image: req.file?.path || ''
-    }
-    // if (req.file) data.image = req.file.path
-    const result = await users.findByIdAndUpdate(req.params.id, data, { new: true })
+    console.log(req.body)
+    const result = await users.findOneAndUpdate(
+      { _id: req.user._id },
+      {
+        $set: {
+          // $ 代表符合陣列搜尋條件的索引
+          name: req.body.name,
+          account: req.body.account,
+          email: req.body.email
+        }
+      }
+    )
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+
+export const editUsers = async (req, res) => {
+  try {
+    await users.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          // $ 代表符合陣列搜尋條件的索引
+          name: req.body.name,
+          account: req.body.account,
+          email: req.body.email
+        }
+      }
+    )
+    res.status(200).send({ success: true, message: '' })
+  } catch (error) {
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+// collection
+export const getCollection = async (req, res) => {
+  try {
+    const result = await users.findById(req.user._id, 'collections').populate('collections.exp')
+    res.status(200).send({ success: true, message: '', result: result.collections })
+  } catch (error) {
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+
+export const addCollection = async (req, res) => {
+  try {
+    // 驗證商品
+    const result = await exps.findById(req.body.exp)
+    // 沒找到或已下架
+    if (!result || !result.sell) {
+      return res.status(404).send({ success: false, message: '商品不存在' })
+    }
+    // 找購物車有沒有這個商品
+    const idx = req.user.collections.findIndex(item => item.product.toString() === req.body.exp)
+    if (idx < 0) {
+      req.user.collections.push({
+        exp: req.body.exp,
+        quantity: req.body.quantity
+      })
+    }
+    await req.user.save()
+    res.status(200).send({ success: true, message: '', result: req.user.collections.length })
+  } catch (error) {
+    console.log(error)
     if (error.name === 'ValidationError') {
-      console.log('1234')
       const key = Object.keys(error.errors)[0]
       const message = error.errors[key].message
       return res.status(400).send({ success: false, message })
     } else {
-      res.status(500).send({ success: false, message: '伺服器錯誤' })
+      res.status(500).send({ success: false, message: error })
     }
+  }
+}
+
+export const deleteCollection = async (req, res) => {
+  // console.log('1234')
+  console.log(req.params.id)
+  console.log(users)
+  try {
+    await users.findOneAndUpdate(
+      { _id: req.user._id, 'collections.exp': req.params.id },
+      {
+        $pull: {
+          collections: { exp: req.params.id }
+        }
+      })
+    res.status(200).send({ success: true, message: '' })
+  } catch (error) {
+    res.status(500).send({ success: false, message: error })
   }
 }

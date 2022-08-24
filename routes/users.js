@@ -11,14 +11,16 @@ import {
   getUser,
   getAllUsers,
   deleteUser,
-  editUser
+  editUser,
+  editUsers
 } from '../controllers/users.js'
 
 const router = express.Router()
 
 router.post('/', content('application/json'), register)
 router.post('/login', content('application/json'), auth.login, login)
-router.patch('/:id', content('application/json'), auth.login, editUser)
+router.patch('/', content('application/json'), auth.jwt, editUser)
+router.patch('/:id', content('application/json'), auth.login, editUsers)
 router.delete('/logout', auth.jwt, logout)
 router.post('/extend', auth.jwt, extend)
 router.get('/', auth.jwt, getUser)
