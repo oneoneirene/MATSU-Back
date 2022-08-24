@@ -8,6 +8,7 @@ export const login = (req, res, next) => {
       return res.status(401).send({ success: false, message: info.message })
     }
     req.user = user
+    console.log(req.user)
     next()
   })(req, res, next)
 }

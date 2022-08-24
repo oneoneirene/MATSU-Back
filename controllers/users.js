@@ -39,6 +39,7 @@ export const login = async (req, res) => {
     const token = jwt.sign({ _id: req.user._id }, process.env.SECRET, { expiresIn: '7 days' })
     req.user.tokens.push(token)
     await req.user.save()
+    console.log('5555')
     res.status(200).send({
       success: true,
       message: '',
@@ -46,9 +47,9 @@ export const login = async (req, res) => {
         token,
         account: req.user.account,
         email: req.user.email,
-        cart: req.user.cart.length,
         role: req.user.role,
-        collection: req.user.collection.length
+        cart: req.user.cart.length,
+        image: req.file?.path || ''
       }
     })
   } catch (error) {
@@ -155,7 +156,8 @@ export const editUser = async (req, res) => {
           // $ 代表符合陣列搜尋條件的索引
           name: req.body.name,
           account: req.body.account,
-          email: req.body.email
+          email: req.body.email,
+          image: req.file?.path || ''
         }
       }
     )
@@ -174,7 +176,8 @@ export const editUsers = async (req, res) => {
           // $ 代表符合陣列搜尋條件的索引
           name: req.body.name,
           account: req.body.account,
-          email: req.body.email
+          email: req.body.email,
+          image: req.file?.path || ''
         }
       }
     )
