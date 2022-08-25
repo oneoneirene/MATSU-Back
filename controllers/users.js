@@ -89,14 +89,9 @@ export const getUser = (req, res) => {
         email: req.user.email,
         name: req.user.name,
         _id: req.user._id,
-        image: req.file?.path || '',
+        image: req.user.image,
         // cart: req.user.cart.length,
         role: req.user.role
-        // 文章
-        // category: req.user.category,
-        // title: req.user.title,
-        // post: req.user.post,
-        // reply: req.user.reply
       }
     })
   } catch (error) {

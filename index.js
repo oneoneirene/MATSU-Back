@@ -10,6 +10,7 @@ import activitiesRouter from './routes/activities.js'
 import communitiesRouter from './routes/community.js'
 import infosRouter from './routes/infos.js'
 import expsRouter from './routes/exps.js'
+import articlesRouter from './routes/articles.js'
 mongoose.connect(process.env.DB_URL)
 
 const app = express()
@@ -38,6 +39,7 @@ app.use('/act', activitiesRouter)
 app.use('/community', communitiesRouter)
 app.use('/info', infosRouter)
 app.use('/exp', expsRouter)
+app.use('/article', articlesRouter)
 
 app.all('*', (req, res) => {
   res.status(404).send({ success: false, message: '找不到' })
