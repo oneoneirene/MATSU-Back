@@ -143,7 +143,6 @@ export const deleteUser = async (req, res) => {
 
 export const editUser = async (req, res) => {
   try {
-    console.log(req.body)
     const result = await users.findOneAndUpdate(
       { _id: req.user._id },
       {
@@ -156,6 +155,16 @@ export const editUser = async (req, res) => {
         }
       }
     )
+    // try {
+    //   const data = {
+    //     name: req.body.name,
+    //     account: req.body.account,
+    //     description: req.body.description,
+    //     sell: req.body.sell,
+    //     category: req.body.category
+    //   }
+    //   if (req.file) data.image = req.file.path
+    //   const result = await users.findByIdAndUpdate(req.params.id, data, { new: true })
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     res.status(500).send({ success: false, message: '伺服器錯誤' })
@@ -218,23 +227,5 @@ export const addCollection = async (req, res) => {
     } else {
       res.status(500).send({ success: false, message: error })
     }
-  }
-}
-
-export const deleteCollection = async (req, res) => {
-  // console.log('1234')
-  console.log(req.params.id)
-  console.log(users)
-  try {
-    await users.findOneAndUpdate(
-      { _id: req.user._id, 'collections.exp': req.params.id },
-      {
-        $pull: {
-          collections: { exp: req.params.id }
-        }
-      })
-    res.status(200).send({ success: true, message: '' })
-  } catch (error) {
-    res.status(500).send({ success: false, message: error })
   }
 }

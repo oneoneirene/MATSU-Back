@@ -8,7 +8,9 @@ export const createActivity = async (req, res) => {
       endDay: req.body.endDay,
       description: req.body.description,
       image: req.file?.path || '',
-      sell: req.body.sell
+      sell: req.body.sell,
+      poster: req.body.poster,
+      link: req.body.link
     })
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
@@ -59,7 +61,9 @@ export const editActivity = async (req, res) => {
       endDay: req.body.endDay,
       description: req.body.description,
       sell: req.body.sell,
-      image: req.file?.path || ''
+      image: req.file?.path || '',
+      poster: req.body.poster,
+      link: req.body.link
     }
     if (req.file) data.image = req.file.path
     const result = await activities.findByIdAndUpdate(req.params.id, data, { new: true })

@@ -5,6 +5,14 @@ const schema = new mongoose.Schema({
     type: String,
     required: [true, '缺少活動名稱']
   },
+  poster: {
+    type: String,
+    required: [true, '缺少發文者名稱']
+  },
+  link: {
+    type: String,
+    required: [true, '缺少連結網址']
+  },
   // price: {
   //   type: Number,
   //   min: [0, '行程價格錯誤'],
@@ -28,14 +36,6 @@ const schema = new mongoose.Schema({
   sell: {
     type: Boolean,
     default: false
-  },
-  start: {
-    type: String,
-    required: [true, '缺少開始日期']
-  },
-  end: {
-    type: String,
-    required: [true, '缺少結束日期']
   }
 }, { versionKey: false })
 
