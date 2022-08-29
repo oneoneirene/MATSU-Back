@@ -8,7 +8,7 @@ export const createInfo = async (req, res) => {
       description: req.body.description,
       image: req.file?.path || '',
       sell: req.body.sell,
-      // category: req.body.category,
+      // category: req.body.category,1
       startDay: req.body.startDay,
       // endDay: req.body.endDay,
       title: req.body.title
