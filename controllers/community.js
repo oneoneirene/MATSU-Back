@@ -57,7 +57,7 @@ export const editCommunity = async (req, res) => {
     const data = {
       name: req.body.name,
       // price: req.body.price,
-      // description: req.body.description,
+      description: req.body.description,
       // image: req.file?.path || '',
       sell: req.body.sell,
       // category: req.body.category,

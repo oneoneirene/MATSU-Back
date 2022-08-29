@@ -10,8 +10,8 @@ const schema = new mongoose.Schema({
     required: [true, '缺少發文者名稱']
   },
   link: {
-    type: String,
-    required: [true, '缺少連結網址']
+    type: String
+    // required: [true, '缺少連結網址']
   },
   // price: {
   //   type: Number,
