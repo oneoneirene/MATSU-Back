@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
   //   type: Date,
   //   required: [true, '缺少下架日期']
   // }
-  // category: {
+  // category: {1
   //   type: String,
   //   required: [true, '缺少分類欄位'],
   //   enum: {
