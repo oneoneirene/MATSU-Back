@@ -11,28 +11,34 @@ import communitiesRouter from './routes/community.js'
 import infosRouter from './routes/infos.js'
 import expsRouter from './routes/exps.js'
 import articlesRouter from './routes/articles.js'
+
+// 🔹 連接 MongoDB
 mongoose.connect(process.env.DB_URL)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err))
 
 const app = express()
 
+// 🔹 CORS 設定
+const allowedOrigins = [
+  'https://oneoneirene.github.io', 
+  'http://localhost:5173'          
+];
+
 app.use(cors({
-  origin (origin, callback) {
-    if (origin === undefined || origin.includes('github') || origin.includes('localhost')) {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true)
     } else {
       callback(new Error('Not Allowed'), false)
     }
   }
-}))
-app.use((_, req, res, next) => {
-  res.status(400).send({ success: false, message: '請求被拒' })
-})
+}));
 
+// 🔹 解析 JSON
 app.use(express.json())
-app.use((_, req, res, next) => {
-  res.status(400).send({ success: false, message: '請求格式錯誤' })
-})
 
+// 🔹 路由
 app.use('/users', userRouter)
 app.use('/job', productsRouter)
 app.use('/act', activitiesRouter)
@@ -41,10 +47,13 @@ app.use('/info', infosRouter)
 app.use('/exp', expsRouter)
 app.use('/article', articlesRouter)
 
+// 🔹 404
 app.all('*', (req, res) => {
   res.status(404).send({ success: false, message: '找不到' })
 })
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log('Server is running')
+// 🔹 啟動 server
+const PORT = process.env.PORT || 4000
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
