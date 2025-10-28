@@ -1,4 +1,4 @@
-import passport from './passport.js'
+import passport from '../passport/passport.js'
 import jsonwebtoken from 'jsonwebtoken'
 
 // 登入驗證 middleware
